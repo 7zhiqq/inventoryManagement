@@ -1,0 +1,25 @@
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Inventory Management</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'excess_inventory' %}active{% endif %}" href="{% url 'excess_inventory' %}">Excess Inventory</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'obsolete_inventory' %}active{% endif %}" href="{% url 'obsolete_inventory' %}">Obsolete Inventory</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'inventory_report' %}active{% endif %}" href="{% url 'inventory_report' %}">Inventory Report</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav><br/>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Obsolete Inventory</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+{% include 'reports/navbar.html' %}
+
+<div class="container">
+  <h3 class="mb-3">Obsolete Inventory <small class="text-muted">(Last sold 10+ months ago)</small></h3>
+
+    <div class="d-flex justify-content-end align-items-center mb-3 gap-2">
+        <button class="btn btn-outline-secondary btn-sm">Filters</button>
+        <button class="btn btn-primary btn-sm">Add New Sale</button>
+        <button id="downloadSelected" class="btn btn-success btn-sm" disabled>
+            <i class="bi bi-download"></i> Download Selected
+        </button>
+    </div>
+
+  <div class="table-responsive shadow-sm rounded">
+    <table id="obsoleteTable" class="table table-bordered table-hover align-middle text-center mb-0">
+      <thead class="table-light">
+        <tr>
+          <th><input type="checkbox" id="selectAll"></th>
+          <th>Product #</th>
+          <th>Item Name</th>
+          <th>Sold</th>
+          <th>Quantity</th>
+          <th>Last Sales Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td><input type="checkbox" class="row-check"></td>
+          <td>{{ p.product_num }}</td>
+          <td>{{ p.item_name }}</td>
+          <td>{{ p.units_sold }}</td>
+          <td>{{ p.quantity_on_hand }}</td>
+          <td>{{ p.last_sales_date }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-warning me-1" title="Edit"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-sm btn-outline-success me-1" title="Archive"><i class="bi bi-archive"></i></button>
+            <button class="btn btn-sm btn-outline-secondary" title="More"><i class="bi bi-three-dots"></i></button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center">No obsolete inventory items found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const selectAll = document.getElementById("selectAll");
+  const rowChecks = document.querySelectorAll(".row-check");
+  const downloadBtn = document.getElementById("downloadSelected");
+  const archiveBtn = document.getElementById("archiveSelected");
+
+  function updateActionButtons() {
+    const checked = document.querySelectorAll(".row-check:checked").length;
+    downloadBtn.disabled = checked === 0;
+    archiveBtn.disabled = checked === 0;
+  }
+
+  selectAll.addEventListener("change", function () {
+    rowChecks.forEach(cb => cb.checked = selectAll.checked);
+    updateActionButtons();
+  });
+
+  rowChecks.forEach(cb => {
+    cb.addEventListener("change", function () {
+      if ([...rowChecks].every(c => c.checked)) {
+        selectAll.checked = true;
+        selectAll.indeterminate = false;
+      } else if ([...rowChecks].some(c => c.checked)) {
+        selectAll.checked = false;
+        selectAll.indeterminate = true;
+      } else {
+        selectAll.checked = false;
+        selectAll.indeterminate = false;
+      }
+      updateActionButtons();
+    });
+  });
+
+  downloadBtn.addEventListener("click", function () {
+    const selected = [];
+    rowChecks.forEach((cb, i) => {
+      if (cb.checked) {
+        const row = cb.closest("tr");
+        selected.push(row.children[1].innerText);
+      }
+    });
+    alert("Downloading: " + selected.join(", "));
+  });
+
+  archiveBtn.addEventListener("click", function () {
+    const selected = [];
+    rowChecks.forEach((cb, i) => {
+      if (cb.checked) {
+        const row = cb.closest("tr");
+        selected.push(row.children[1].innerText);
+      }
+    });
+    alert("Archiving: " + selected.join(", "));
+  });
+});
+</script>
+
+</body>
+</html>
