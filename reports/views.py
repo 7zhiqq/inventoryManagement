@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 import csv
 import json
 
-uri = "mongodb+srv://kfgmationg_db_user:sevenzhiq@inventory-management.d9mq3xr.mongodb.net/?retryWrites=true&w=majority&appName=inventory-management"
+uri = "mongodb+srv://<username>:<password>@inventory-management.d9mq3xr.mongodb.net/?retryWrites=true&w=majority&appName=inventory-management"
 
 client = MongoClient(uri, server_api=ServerApi('1'))
 
